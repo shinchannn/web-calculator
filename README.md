@@ -1,70 +1,131 @@
-# Getting Started with Create React App
+# Web Calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Table of Contents
 
-## Available Scripts
+- [Web Calculator](#web-calculator)
+  - [Project Overview](#project-overview)
+  - [Project Structure](#project-structure)
+    - [Front-end](#front-end)
+    - [Back-end](#back-end)
+  - [Features](#features)
+    - [Basic Calculator](#basic-calculator)
+      - [Irregular Input Sequences](#irregular-input-sequences)
+    - [Real-time sharing](#real-time-sharing)
+    - [Sign-In via Google](#sign-in-via-google)
+  - [User Instructions](#user-instructions)
+  - [Issues Encountered](#issues-encountered)
+  - [Possible Improvements](#possible-improvements)
+  - [Third Party Assets](#third-party-assets)
 
-In the project directory, you can run:
+## Project Overview
 
-### `npm start`
+In this project, I established a web calculator using **React** for front-end UI and **express.js**, **socket.io** for back-end server. The live demo can be accessed [here](https://web-calculator-xin.herokuapp.com) (make sure you include "https://" in the url). It logs calculations as they happen and shares those calculations with everyone connected to the app.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Project Structure
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+There are two sides in this project: front-end and back-end side:
 
-### `npm test`
+### Front-end
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The Front-end side is mainly responsible for user interaction and basic calculation tasks; various components are defined here.
 
-### `npm run build`
+[(code repository)](https://github.com/shinchannn/web-calculator)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+web-calculator
+├─.gitignore
+├─README.md
+├─package-lock.json
+├─package.json
+├─src
+|  ├─index.js
+|  ├─components
+|  |     ├─App.js
+|  |     ├─GoogleAuth.js
+|  |     ├─Header.js
+|  |     ├─RecordableCalculator.js
+|  |     ├─Records.js
+|  |     ├─calculator
+|  |     |     ├─Calculator.css
+|  |     |     ├─Calculator.js
+|  |     |     ├─Display.js
+|  |     |     ├─buttons
+|  |     |     |    ├─ClearButton.js
+|  |     |     |    ├─EqualButton.js
+|  |     |     |    ├─MiscButton.js
+|  |     |     |    ├─NumberButton.js
+|  |     |     |    ├─OperatorButton.js
+|  |     |     |    ├─helper
+|  |     |     |    |   └mappings.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Back-end
 
-### `npm run eject`
+The Back-end side takes responsibility for calculations to all connected users by real-time broadcast.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+[(code repository)](https://github.com/shinchannn/web-calculator-server)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+web-calculator-server
+├─.gitignore
+├─README.md
+├─index.js
+├─package-lock.json
+├─package.json
+├─router.js
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Features
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Basic Calculator
 
-## Learn More
+The calculator is designed to look and behave the same as iPhone's built-in calculator, robust with irregular input sequences. Check out the fantastic [UI](https://codepen.io/sfrisk/pen/BymJer) by [Sarah Frisk](https://codepen.io/sfrisk).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[Math.js](mathjs.org) is used to help solve the precision problem.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Irregular Input Sequences
 
-### Code Splitting
+In most cases, users input regular calculator sequences that won't need extreme care. Despite that, the calculator is implemented with robustness to cover irregular inputs. Behaviors under thoes irregular patterns are designed to be the same as iPhone's built-in app. Edge inputs tested during development, along with explanations, are listed below:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Sequence        | Explanation                                             |
+| --------------- | ------------------------------------------------------- |
+| 1 + 1 = 3       | After '3' entered, it should clear display and show '3' |
+| 1 + 1 + 1       | After the second '1' entered, '2' should be displayed   |
+| 7 \* 9 \* \* \* | Redundant '\*' should not invoke any calculation        |
+| 3 + + - 6       | The last '-' entered determines calculation type        |
+| 6 + 9 = .       | '0.' should be displayed, rather than '.' ''            |
+| 9 \* 6.3 =      | Precision problem with javascript                       |
 
-### Analyzing the Bundle Size
+### Real-time sharing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Implemented with **socket.io**, this feature allows users to read all calculations done on this web application. At the same time, the user who requested the calculation, as well as the creation time of requests, are also available.
 
-### Making a Progressive Web App
+It utilizes the broadcast function provided by deployed [server code](https://github.com/shinchannn/web-calculator-server).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Sign-In via Google
 
-### Advanced Configuration
+This web application allows users to sign in via [google oauth](https://developers.google.com/identity/protocols/oauth2). After signing in, calculations done by the users will be logged along with their google username.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## User Instructions
 
-### Deployment
+1.  Open two or more web browsers on different devices.
+2.  Either sign in or calculate as a guest.
+3.  Calculate and see records updated from all connected browsers.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Issues Encountered
 
-### `npm run build` fails to minify
+There are several issues that took me some time to evetually fix:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Google auth won't allow configuration of javaScript origins after the creation of the credential key. It's probably a bug on google's side. Click [here](https://stackoverflow.com/questions/42566296/google-api-authentication-not-valid-origin-for-the-client) for more information.
+2. Sign-in function doesn't work properly when "https://" is missing.
+
+## Possible Improvements
+
+In this project, I see a great potential to get rid of deeply nested props and function calls by incorporating **Redux**. Since I'm new to react-redux interaction, it will take some time to learn it and carefully design redux store.
+
+## Third Party Assets
+
+[Calculator Style](https://codepen.io/sfrisk/pen/BymJer)
+
+[Semantic UI](https://semantic-ui.com/)
