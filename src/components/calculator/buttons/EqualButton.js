@@ -1,4 +1,5 @@
 import React from "react";
+import { reversedMap } from "./helper/mappings";
 
 const EqualButton = ({
   prev,
@@ -8,13 +9,16 @@ const EqualButton = ({
   setText,
   append,
   setAppend,
+  sendRecord,
 }) => {
   const onEqualClick = () => {
     if (!operation || !append) return;
     const math = window.math;
-    setText(
-      math.format(math.evaluate(prev + operation + text), { precision: 14 })
-    );
+    const result = math.format(math.evaluate(prev + operation + text), {
+      precision: 14,
+    });
+    setText(result);
+    sendRecord(`${prev} ${reversedMap.get(operation)} ${text} = ${result}`); // send record to server for broadcasting
     setOperation(null);
     setAppend(false);
   };

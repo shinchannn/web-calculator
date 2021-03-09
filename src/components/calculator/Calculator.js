@@ -7,7 +7,7 @@ import MiscButton from "./buttons/MiscButton";
 import Display from "./Display";
 import "./Calculator.css";
 
-const Calculator = () => {
+const Calculator = ({ sendRecord }) => {
   const [text, setText] = useState("0");
   const [prev, setPrev] = useState("0");
   const [operation, setOperation] = useState(null);
@@ -42,6 +42,7 @@ const Calculator = () => {
             setOperation={setOperation}
             append={append}
             setAppend={setAppend}
+            sendRecord={sendRecord}
           />
         </div>
         <div className="row">
@@ -76,6 +77,7 @@ const Calculator = () => {
             setOperation={setOperation}
             append={append}
             setAppend={setAppend}
+            sendRecord={sendRecord}
           />
         </div>
         <div className="row">
@@ -110,6 +112,7 @@ const Calculator = () => {
             setOperation={setOperation}
             append={append}
             setAppend={setAppend}
+            sendRecord={sendRecord}
           />
         </div>
         <div className="row">
@@ -144,6 +147,7 @@ const Calculator = () => {
             setOperation={setOperation}
             append={append}
             setAppend={setAppend}
+            sendRecord={sendRecord}
           />
         </div>
         <div className="row">
@@ -169,6 +173,7 @@ const Calculator = () => {
             setText={setText}
             append={append}
             setAppend={setAppend}
+            sendRecord={sendRecord}
           />
         </div>
       </div>

@@ -1,11 +1,5 @@
 import React from "react";
-
-const map = new Map([
-  ["+", "+"],
-  ["-", "-"],
-  ["×", "*"],
-  ["÷", "/"],
-]);
+import { map, reversedMap } from "./helper/mappings";
 
 const OperatorButton = ({
   operator,
@@ -17,6 +11,7 @@ const OperatorButton = ({
   operation,
   setOperation,
   setAppend,
+  sendRecord,
 }) => {
   const onOperatorClick = () => {
     if (operation) {
@@ -30,7 +25,7 @@ const OperatorButton = ({
         const result = math.format(math.evaluate(prev + operation + text), {
           precision: 14,
         });
-
+        sendRecord(`${prev} ${reversedMap.get(operation)} ${text} = ${result}`); // send record to server for broadcasting
         setText(result);
         setPrev(result);
         setOperation(map.get(operator)); // consume an operation
