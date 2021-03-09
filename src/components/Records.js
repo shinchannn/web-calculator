@@ -10,7 +10,7 @@ const Records = ({ records }) => {
           {r.username ? (
             <i className="google plus icon"></i>
           ) : (
-            <i class="question circle icon"></i>
+            <i className="question circle icon"></i>
           )}
           <div className="content">
             <div className="header">
@@ -18,6 +18,7 @@ const Records = ({ records }) => {
             </div>
             {r.text}
           </div>
+          <div className="right floated content">{r.createdTime}</div>
         </div>
       );
     });

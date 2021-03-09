@@ -31,10 +31,21 @@ const RecordableCalculator = () => {
     });
   }, []);
 
-  const sendRecord = (r) => {
+  const getUserName = () => {
+    if (!window.gapi.auth2) return;
     const auth = window.gapi.auth2.getAuthInstance();
-    const username = auth.isSignedIn.get() ? "google" : null;
-    socket.emit("sendRecord", { r, username }, () => {});
+    return auth.isSignedIn.get()
+      ? auth.currentUser.get().getBasicProfile().getName()
+      : null;
+  };
+
+  const sendRecord = (r) => {
+    const username = getUserName();
+    socket.emit(
+      "sendRecord",
+      { r, username, createdTime: new Date().toLocaleTimeString() },
+      () => {}
+    );
   };
 
   return (
